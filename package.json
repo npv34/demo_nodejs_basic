@@ -1,0 +1,11 @@
+{
+    "type": "commonjs",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "dependencies": {
+        "nodemon": "^3.1.9",
+        "qs": "^6.13.1",
+        "url": "^0.11.4"
+    }
+}
