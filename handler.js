@@ -1,51 +1,30 @@
-const fs = require('fs');
 const qs = require('qs');
+const { readDataToFile } = require('./services/file.service');
 
 const handler = {};
 
-handler.getLoginPage = (req, res) => {
+handler.getLoginPage = async (req, res) => {
     res.setHeader('Content-Type', 'text/html');
     res.statusCode = 200;
-    fs.readFile("./views/login.html", (err, data) => {
-        if(err) {
-            console.error("Error reading file:", err);
-            res.writeHead(500);
-            res.end("Error reading file");
-            return;
-        }
-        res.write(data);
-        res.end();
-    });
+    const data = await readDataToFile("./views/login.html");
+    res.write(data);
+    res.end();
 }
 
-handler.getHomePage = (req, res) => {
+handler.getHomePage = async (req, res) => {
     res.setHeader('Content-Type', 'text/html');
     res.statusCode = 200;
-    fs.readFile("./views/home.html", (err, data) => {
-        if(err) {
-            console.error("Error reading file:", err);
-            res.writeHead(500);
-            res.end("Error reading file");
-            return;
-        }
-        res.write(data);
-        res.end();
-    });
+    const data = await readDataToFile("./views/home.html");
+    res.write(data);
+    res.end();
 }
 
-handler.getAdminPage = (req, res) => {
+handler.getAdminPage = async (req, res) => {
     res.setHeader('Content-Type', 'text/html');
     res.statusCode = 200;
-    fs.readFile("./views/admin.html", (err, data) => {
-        if(err) {
-            console.error("Error reading file:", err);
-            res.writeHead(500);
-            res.end("Error reading file");
-            return;
-        }
-        res.write(data);
-        res.end();
-    });
+    const data = await readDataToFile("./views/admin.html");
+    res.write(data);
+    res.end();
 }
 
 handler.login = (req, res) => {
@@ -70,25 +49,20 @@ handler.login = (req, res) => {
     })
 }
 
-handler.getStaticFiles = (req, res) => {
+handler.getStaticFiles = async (req, res) => {
     const url = req.url;
     const cssPattern = /css/;
     const jsPattern = /js/;
     if(cssPattern.test(url)) {
-        console.log(1);
         res.setHeader('Content-Type', 'text/css');
-        fs.readFile(`.${url}`, (err, data) => {
-            if(err) {
-                console.error("Error reading file:", err);
-                res.writeHead(500);
-                res.end("Error reading file");
-                return;
-            }
-            res.write(data);
-            res.end();
-        });
-    } else{
-        console.log(2)
+        const data = await readDataToFile(`./${url}`);
+        res.write(data);
+        res.end();
+    } else if(jsPattern.test(url)) {
+        res.setHeader('Content-Type', 'text/js');
+        const data = await readDataToFile(`./${url}`);
+        res.write(data);
+        res.end();
     }
 }
 
